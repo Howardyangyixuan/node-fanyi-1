@@ -1,13 +1,13 @@
 {
-  "name": "fanyi-1",
-  "version": "0.0.1",
-  "main": "index.js",
+  "name": "yyx-fanyi-1",
+  "version": "0.0.3",
+  "main": "dist/main.js",
   "license": "MIT",
   "scripts": {
     "start": "ts-node-dev src/main.ts"
   },
   "bin": {
-    "fy": "src/cli.ts"
+    "fy": "dist/cli.js"
   },
   "files": [
     "dist/**/*.js"
