@@ -3,7 +3,10 @@ import * as querystring from 'querystring';
 import md5 = require('md5');
 import {appid, password} from './private';
 
-const errorMap = {
+type ErrorMap = {
+  [key:string]: string | undefined
+}
+const errorMap:ErrorMap = {
   52000: '成功',
   52001: '请求超时,请重试',
   52002: '系统错误,请重试',
@@ -17,11 +20,19 @@ const errorMap = {
   58001: '	译文语言方向不支持,请检查译文语言是否在语言列表里',
   58002: '	服务当前已关闭	,请前往管理控制台开启服务',
   90107: '	认证未通过或未生效	,请前往我的认证查看认证进度',
-  unknown:'服务器繁忙'
+  unknown: '服务器繁忙'
 };
-export const translate = (word) => {
+export const translate = (word:string) => {
   // console.log(word);
-  const q = word, from = 'en', to = 'zh';
+  const q = word;
+  let from:string, to:string;
+  if (/[a-zA-Z]/.test(q[0])) {
+    from = 'en';
+    to = 'zh';
+  } else {
+    from = 'zh';
+    to = 'en';
+  }
   const salt = Math.random();
   // const salt = '1435660288'
   const sign = md5(appid + q + salt + password);
@@ -35,8 +46,8 @@ export const translate = (word) => {
   };
 
   const request = https.request(options, (response) => {
-    let chunks = [];
-    response.on('data', (data, error) => {
+    let chunks:Buffer[] = [];
+    response.on('data', (data:Buffer) => {
       chunks.push(data);
     });
     response.on('end', () => {
